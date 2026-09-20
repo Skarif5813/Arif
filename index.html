@@ -3,16 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Movie Ticket Booking</title>
+  <title>Vibrant Ticket Booking Portal</title>
   <style>
     :root {
-      --body-bg: #242526;
-      --container-bg: #18191a;
-      --primary-color: #3498db;
-      --seat-available: #4e4e50;
-      --seat-selected: #2ecc71;
-      --seat-occupied: #e74c3c;
-      --text-color: #ffffff;
+      /* Colorful Theme Variables */
+      --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --container-bg: rgba(255, 255, 255, 0.95);
+      --primary-color: #ff4757;
+      --primary-hover: #ff6b81;
+      --seat-available: #e0e0e0;
+      --seat-selected: #2ed573;
+      --seat-occupied: #ffa502;
+      --text-dark: #2f3542;
+      --text-light: #57606f;
     }
 
     * {
@@ -22,8 +25,8 @@
     }
 
     body {
-      background-color: var(--body-bg);
-      color: var(--text-color);
+      background: var(--gradient-bg);
+      color: var(--text-dark);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
       flex-direction: column;
@@ -35,42 +38,69 @@
 
     .booking-container {
       background-color: var(--container-bg);
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+      padding: 35px;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
       display: flex;
       flex-direction: column;
       align-items: center;
+      width: 100%;
+      max-width: 450px;
+      backdrop-filter: blur(10px);
     }
 
-    /* Movie Selection */
+    h2 {
+      font-size: 26px;
+      margin-bottom: 20px;
+      background: linear-gradient(45deg, #ff4757, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    /* Event Selection Dropdown */
     .movie-container {
-      margin: 20px 0;
+      margin: 15px 0 25px 0;
       width: 100%;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .movie-container label {
+      font-weight: 600;
+      color: var(--text-light);
+      font-size: 14px;
     }
 
     .movie-container select {
-      background-color: #3a3b3c;
-      color: var(--text-color);
-      border: none;
-      padding: 8px 15px;
-      border-radius: 5px;
-      font-size: 14px;
+      background: #f1f2f6;
+      color: var(--text-dark);
+      border: 2px solid #ced6e0;
+      padding: 12px 15px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
       outline: none;
       cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .movie-container select:focus {
+      border-color: #764ba2;
+      box-shadow: 0 0 10px rgba(118, 75, 162, 0.2);
     }
 
     /* Legend Showcase */
     .showcase {
-      background: rgba(0, 0, 0, 0.2);
-      padding: 10px 20px;
-      border-radius: 5px;
+      background: #f1f2f6;
+      padding: 12px 20px;
+      border-radius: 12px;
       list-style-type: none;
       display: flex;
-      gap: 20px;
+      justify-content: space-around;
+      width: 100%;
       margin-bottom: 30px;
     }
 
@@ -78,7 +108,9 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-light);
     }
 
     /* Common Seat Styles */
@@ -89,45 +121,63 @@
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: inset 0 -3px 0 rgba(0,0,0,0.1);
     }
 
     .seat:hover:not(.occupied) {
-      transform: scale(1.15);
+      transform: scale(1.25);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.15);
     }
 
     .seat.selected {
       background-color: var(--seat-selected);
+      box-shadow: 0 0 12px rgba(46, 213, 115, 0.6);
     }
 
     .seat.occupied {
       background-color: var(--seat-occupied);
       cursor: not-allowed;
+      box-shadow: none;
     }
 
     /* Theater Layout */
     .theater-container {
       perspective: 1000px;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      width: 100%;
     }
 
+    /* Stage/Screen Indicator */
     .screen {
-      background-color: #fff;
-      height: 70px;
-      width: 100%;
-      margin: 15px 0 30px 0;
-      transform: rotateX(-45deg);
-      box-shadow: 0 3px 20px rgba(255, 255, 255, 0.7);
-      border-radius: 5px;
+      background: linear-gradient(to bottom, #ff7f50, #ff4757);
+      height: 12px;
+      width: 85%;
+      margin: 10px 0 35px 0;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(255, 71, 87, 0.5);
+      position: relative;
+    }
+
+    .screen::after {
+      content: 'STAGE / SCREEN';
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      font-weight: 700;
+      color: #ff4757;
+      letter-spacing: 2px;
     }
 
     .seating-grid {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
 
     .row {
@@ -135,55 +185,72 @@
       gap: 10px;
     }
 
-    /* Add walkway gaps between columns */
+    /* Aesthetic Gaps for Aisles */
     .seat:nth-of-type(2),
     .seat:nth-of-type(6) {
       margin-right: 18px;
     }
 
-    /* Summary Information */
-    .summary-text {
+    /* Summary Information Box */
+    .summary-box {
+      background: #f8f9fa;
+      border-left: 5px solid #764ba2;
+      padding: 15px;
+      border-radius: 8px;
+      width: 100%;
       margin-top: 10px;
-      font-size: 15px;
       text-align: center;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-dark);
     }
 
-    .summary-text span {
-      color: var(--primary-color);
-      font-weight: bold;
+    .summary-box span {
+      font-size: 18px;
     }
+    
+    #count { color: #764ba2; font-weight: 700; }
+    #total { color: #2ed573; font-weight: 700; }
 
+    /* Booking Button */
     button.book-btn {
-      margin-top: 20px;
-      background-color: var(--primary-color);
+      margin-top: 25px;
+      background: linear-gradient(45deg, #764ba2, #667eea);
       color: white;
       border: none;
-      padding: 10px 25px;
-      border-radius: 5px;
+      padding: 14px;
+      border-radius: 12px;
       font-size: 16px;
       cursor: pointer;
-      font-weight: 600;
+      font-weight: 700;
       width: 100%;
-      transition: background 0.2s;
+      letter-spacing: 1px;
+      box-shadow: 0 8px 20px rgba(118, 75, 162, 0.3);
+      transition: all 0.3s;
     }
 
     button.book-btn:hover {
-      background-color: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(118, 75, 162, 0.4);
+    }
+    
+    button.book-btn:active {
+      transform: translateY(1px);
     }
   </style>
 </head>
 <body>
 
   <div class="booking-container">
-    <h2>Movie Ticket Booking</h2>
+    <h2>Celebration Booking</h2>
 
-    <!-- Movie Selection dropdown -->
+    <!-- Dropdown menu -->
     <div class="movie-container">
-      <label for="movie">Select Movie:</label>
+      <label for="movie">Choose Event / Movie:</label>
       <select id="movie">
+        <option value="15" selected>Arif Mheen Marriage (\$15)</option>
         <option value="12">Avengers: Endgame (\$12)</option>
         <option value="10">Inception (\$10)</option>
-        <option value="15">Avatar: The Way of Water (\$15)</option>
         <option value="8">Interstellar (\$8)</option>
       </select>
     </div>
@@ -200,16 +267,16 @@
       </li>
       <li>
         <div class="seat occupied"></div>
-        <small>Occupied</small>
+        <small>Reserved</small>
       </li>
     </ul>
 
-    <!-- Theater Matrix -->
+    <!-- Layout Grid -->
     <div class="theater-container">
       <div class="screen"></div>
 
       <div class="seating-grid" id="seatingGrid">
-        <!-- 6 Rows of 8 Seats -->
+        <!-- 6 Rows of 8 Seats Matrix -->
         <div class="row">
           <div class="seat"></div><div class="seat"></div>
           <div class="seat"></div><div class="seat occupied"></div>
@@ -249,12 +316,12 @@
       </div>
     </div>
 
-    <!-- Calculations Text -->
-    <p class="summary-text">
-      You have selected <span id="count">0</span> seats for a total price of \$<span id="total">0</span>
-    </p>
+    <!-- Calculations Info Summary -->
+    <div class="summary-box">
+      Selected <span id="count">0</span> seats &bull; Total: <span id="total">$0</span>
+    </div>
 
-    <button class="book-btn" id="bookBtn">Confirm Booking</button>
+    <button class="book-btn" id="bookBtn">Book Seats Now</button>
   </div>
 
   <script>
@@ -264,25 +331,24 @@
     const total = document.getElementById('total');
     const bookBtn = document.getElementById('bookBtn');
 
-    // Get initial movie ticket price from the value attribute
     let ticketPrice = parseInt(movieSelect.value);
 
-    // Update total price and count of seats selected
+    // Dynamic calculations update loop
     function updateSelectedCount() {
       const selectedSeats = document.querySelectorAll('.row .seat.selected');
       const selectedSeatsCount = selectedSeats.length;
 
       count.innerText = selectedSeatsCount;
-      total.innerText = selectedSeatsCount * ticketPrice;
+      total.innerText = '$' + (selectedSeatsCount * ticketPrice);
     }
 
-    // Movie selection change event
+    // Switch selection tracking listener
     movieSelect.addEventListener('change', (e) => {
       ticketPrice = parseInt(e.target.value);
       updateSelectedCount();
     });
 
-    // Seat click event (using event delegation on parent container)
+    // Seat click state toggle event
     seatingGrid.addEventListener('click', (e) => {
       if (e.target.classList.contains('seat') && !e.target.classList.contains('occupied')) {
         e.target.classList.toggle('selected');
@@ -290,22 +356,6 @@
       }
     });
 
-    // Final checkout button alert logic
+    // Confirm button dispatch function
     bookBtn.addEventListener('click', () => {
       const selectedSeatsCount = document.querySelectorAll('.row .seat.selected').length;
-      if (selectedSeatsCount > 0) {
-        alert(`Successfully booked ${selectedSeatsCount} tickets! Total paid: $${selectedSeatsCount * ticketPrice}`);
-        
-        // Turn selected seats into occupied seats upon checkout
-        document.querySelectorAll('.row .seat.selected').forEach(seat => {
-          seat.classList.remove('selected');
-          seat.classList.add('occupied');
-        });
-        updateSelectedCount();
-      } else {
-        alert('Please select at least one seat to book.');
-      }
-    });
-  </script>
-</body>
-</html>
